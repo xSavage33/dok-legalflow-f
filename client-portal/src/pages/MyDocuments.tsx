@@ -305,7 +305,7 @@ export default function MyDocuments() {
 
                     {/* Celda: Tamano formateado */}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {formatFileSize(doc.file_size)}
+                      {formatFileSize(doc.file_size ?? 0)}
                     </td>
 
                     {/* Celda: Fecha formateada */}

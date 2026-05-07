@@ -58,4 +58,4 @@ beforeAll(() => {
 })
 
 // Mock fetch globally
-global.fetch = vi.fn()
+globalThis.fetch = vi.fn() as typeof fetch

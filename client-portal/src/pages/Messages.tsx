@@ -80,7 +80,7 @@ export default function Messages() {
    * Se ejecuta automaticamente al seleccionar un mensaje no leido
    */
   const markAsRead = useMutation({
-    mutationFn: async (messageId: number) => {
+    mutationFn: async (messageId: string) => {
       // Peticion POST para marcar como leido
       await api.post(`/portal/messages/${messageId}/mark-read/`)
     },
@@ -114,15 +114,15 @@ export default function Messages() {
 
   /**
    * Filtra mensajes recibidos (donde el cliente es destinatario)
-   * recipient_id !== 0 indica que el mensaje fue recibido
+   * recipient_id existente indica que el mensaje fue recibido
    */
-  const inboxMessages = messages?.results.filter((m) => m.recipient_id !== 0) || []
+  const inboxMessages = messages?.results.filter((m) => !!m.recipient_id) || []
 
   /**
    * Filtra mensajes enviados (donde el cliente es remitente)
-   * sender_id !== 0 indica que el mensaje fue enviado
+   * sender_id existente indica que el mensaje fue enviado
    */
-  const sentMessages = messages?.results.filter((m) => m.sender_id !== 0) || []
+  const sentMessages = messages?.results.filter((m) => !!m.sender_id) || []
 
   // Mensajes a mostrar segun el tab activo
   const displayMessages = activeTab === 'inbox' ? inboxMessages : sentMessages
