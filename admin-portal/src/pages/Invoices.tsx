@@ -40,18 +40,13 @@ import type { Invoice, Case, User, PaginatedResponse } from '../types'
 import {
   Plus,           // Icono para agregar nuevos elementos
   Search,         // Icono de lupa para busqueda
-  DollarSign,     // Icono de dolar para montos
   X,              // Icono para cerrar modales
   Send,           // Icono para enviar factura
   CreditCard,     // Icono para pagos con tarjeta
-  FileText,       // Icono de documento (no usado actualmente)
   Trash2,         // Icono de papelera para eliminar
-  Eye,            // Icono de ojo para ver detalles (no usado)
   Loader2,        // Icono de carga animado (spinner)
   AlertCircle,    // Icono de alerta para errores
   CheckCircle,    // Icono de confirmacion
-  Filter,         // Icono de filtro (no usado actualmente)
-  Calendar,       // Icono de calendario (no usado)
   Receipt,        // Icono de recibo para estado vacio
   ChevronRight,   // Icono de flecha derecha para navegacion
 } from 'lucide-react'
@@ -114,6 +109,7 @@ interface InvoiceDetail extends Invoice {
   tax_rate: number           // Porcentaje de impuesto aplicado
   tax_amount: number         // Monto calculado del impuesto
   discount_amount: number    // Monto de descuento aplicado
+  amount_paid?: number       // Monto total pagado (calculado)
   notes?: string             // Notas para el cliente
   terms?: string             // Terminos y condiciones
   client_address?: string    // Direccion del cliente
@@ -198,8 +194,9 @@ export default function Invoices() {
   // Estado para el filtro de estado de factura
   const [statusFilter, setStatusFilter] = useState('')
 
-  // Estado para mostrar/ocultar panel de filtros (no usado actualmente)
+  // Estado para mostrar/ocultar panel de filtros (reservado para uso futuro)
   const [showFilters, setShowFilters] = useState(false)
+  void showFilters; void setShowFilters
 
   // Estado para mostrar/ocultar modal de creacion
   const [showCreateModal, setShowCreateModal] = useState(false)
@@ -408,6 +405,7 @@ export default function Invoices() {
       queryClient.invalidateQueries({ queryKey: ['invoices'] })
     },
   })
+  void addItemMutation; void deleteItemMutation // Reservados para edicion futura
 
   /**
    * Mutacion para enviar una factura al cliente

@@ -48,11 +48,7 @@ import type { Case } from '../types'
 // - FileText: icono de documento
 // - Clock: icono de reloj para tiempo
 // - Receipt: icono de recibo para facturas
-// - Users: icono de usuarios (no usado actualmente pero importado)
-import { ArrowLeft, Edit, FileText, Clock, Receipt, Users } from 'lucide-react'
-
-// Importa clsx para construir strings de clases CSS condicionalmente
-import clsx from 'clsx'
+import { ArrowLeft, Edit, FileText, Clock, Receipt } from 'lucide-react'
 
 /**
  * Componente principal de la pagina de detalle de caso

@@ -47,7 +47,6 @@ import {
   LogOut,           // Icono para cerrar sesion
   Menu,             // Icono de menu hamburguesa para movil
   X,                // Icono X para cerrar el sidebar movil
-  ShieldAlert,      // Icono de alerta de seguridad (no utilizado actualmente)
 } from 'lucide-react'
 
 // Importacion de hooks de React

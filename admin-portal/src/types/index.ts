@@ -426,6 +426,10 @@ export interface Deadline {
   case_id?: string
   // Numero del caso asociado
   case_number?: string
+  // ID del usuario asignado (opcional)
+  assigned_to?: string
+  // Nombre del usuario asignado (opcional)
+  assigned_to_name?: string
   // Dias restantes hasta la fecha limite (calculado)
   days_remaining?: number
   // Indica si el plazo ya vencio

@@ -49,7 +49,6 @@ import type { Message, MessageCreate, Case, User, PaginatedResponse } from '../t
 
 // Iconos de la biblioteca Lucide React para la interfaz visual
 import {
-  MessageSquare, // Icono de burbuja de mensaje (no usado actualmente)
   Send,          // Icono de enviar - usado en boton enviar y pestana enviados
   Inbox,         // Icono de bandeja de entrada
   Mail,          // Icono de correo - usado cuando no hay mensajes

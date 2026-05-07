@@ -32,7 +32,7 @@ import { useAuth } from '../context/AuthContext'
 
 // Iconos de la biblioteca Lucide React para la interfaz visual
 // Cada icono representa visualmente una metrica especifica
-import { BarChart3, TrendingUp, DollarSign, Briefcase, Clock, AlertTriangle } from 'lucide-react'
+import { BarChart3, DollarSign, Briefcase, Clock, AlertTriangle } from 'lucide-react'
 
 // ============================================================================
 // COMPONENTE PRINCIPAL

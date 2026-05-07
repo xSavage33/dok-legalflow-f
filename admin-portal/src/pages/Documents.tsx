@@ -44,11 +44,10 @@ import api from '../services/api'
 
 // Importa tipos TypeScript para tipado estatico:
 // - Document: estructura de un documento
-// - DocumentVersion: estructura de una version de documento
 // - DocumentAccessLog: registro de acceso a documento
 // - Case: estructura de un caso (para el dropdown de asociacion)
 // - PaginatedResponse: wrapper de respuesta paginada
-import type { Document, DocumentVersion, DocumentAccessLog, Case, PaginatedResponse } from '../types'
+import type { Document, DocumentAccessLog, Case, PaginatedResponse } from '../types'
 
 // Importa iconos de Lucide React para la interfaz:
 // Cada icono tiene un proposito especifico en la UI
@@ -57,7 +56,6 @@ import {
   Search,          // Icono de busqueda
   FileText,        // Icono generico de documento
   Download,        // Icono de descarga
-  Eye,             // Icono de visualizar (no usado actualmente)
   X,               // Icono de cerrar modal
   Filter,          // Icono de filtros
   History,         // Icono de historial/versiones
@@ -69,15 +67,13 @@ import {
   ChevronRight,    // Flecha de navegacion
   Plus,            // Icono de agregar
   AlertCircle,     // Icono de alerta/error
-  CheckCircle,     // Icono de exito (no usado actualmente)
   FileUp,          // Icono de archivo seleccionado para subir
 } from 'lucide-react'
 
 // Importa hooks de React:
 // - useState: manejo de estado local
 // - useRef: referencia a elementos del DOM (inputs de archivo)
-// - useEffect: efectos secundarios (no usado actualmente pero importado)
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 
 // Importa clsx para construir strings de clases CSS condicionalmente
 import clsx from 'clsx'
@@ -612,11 +608,11 @@ export default function Documents() {
                     <h3 className="font-medium text-gray-900 truncate">{doc.name}</h3>
                     {/* Icono de confidencial si aplica */}
                     {doc.is_confidential && (
-                      <Shield className="h-4 w-4 text-red-500" title="Confidencial" />
+                      <span title="Confidencial"><Shield className="h-4 w-4 text-red-500" /></span>
                     )}
                     {/* Icono de privilegiado si aplica */}
                     {doc.is_privileged && (
-                      <Lock className="h-4 w-4 text-amber-500" title="Privilegiado" />
+                      <span title="Privilegiado"><Lock className="h-4 w-4 text-amber-500" /></span>
                     )}
                   </div>
                   {/* Nombre del archivo original */}

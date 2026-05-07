@@ -7,7 +7,7 @@
 
 import { ReactElement, ReactNode } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
-import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router-dom'
+import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider } from '../context/AuthContext'
 

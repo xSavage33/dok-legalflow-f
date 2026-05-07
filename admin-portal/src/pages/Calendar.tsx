@@ -39,19 +39,13 @@ import {
   Plus,             // Icono para agregar nuevos elementos
   Calendar as CalendarIcon, // Icono de calendario (renombrado para evitar conflicto)
   AlertTriangle,    // Icono de alerta para plazos vencidos
-  Clock,            // Icono de reloj (no usado actualmente)
   MapPin,           // Icono de ubicacion
   X,                // Icono para cerrar modales
   Loader2,          // Icono de carga animado
   CheckCircle,      // Icono de confirmacion
   AlertCircle,      // Icono de alerta para errores
-  Filter,           // Icono de filtro (no usado actualmente)
-  ChevronRight,     // Icono de flecha derecha (no usado)
-  CalendarDays,     // Icono de dias del calendario (no usado)
   Users,            // Icono de usuarios para asignaciones
   Briefcase,        // Icono de maletin para casos
-  Edit,             // Icono de edicion (no usado actualmente)
-  Trash2,           // Icono de papelera (no usado)
   Check,            // Icono de check para completar
   RotateCcw,        // Icono para extender/renovar
 } from 'lucide-react'
@@ -86,15 +80,17 @@ const EVENT_TYPES = [
 ]
 
 /**
- * EVENT_STATUSES: Define los estados posibles de un evento
+ * _EVENT_STATUSES: Define los estados posibles de un evento
+ * Prefijo _ indica que se mantiene para referencia futura
  */
-const EVENT_STATUSES = [
+const _EVENT_STATUSES = [
   { value: 'scheduled', label: 'Programado' },     // Evento programado
   { value: 'confirmed', label: 'Confirmado' },     // Evento confirmado
   { value: 'completed', label: 'Completado' },     // Evento realizado
   { value: 'cancelled', label: 'Cancelado' },      // Evento cancelado
   { value: 'rescheduled', label: 'Reprogramado' }, // Evento reprogramado
 ]
+void _EVENT_STATUSES
 
 /**
  * PRIORITIES: Define los niveles de prioridad para plazos
@@ -488,6 +484,7 @@ export default function Calendar() {
   const getPriorityLabel = (priority: string) => {
     return PRIORITIES.find((p) => p.value === priority)?.label || priority
   }
+  void getPriorityLabel // Reservado para uso futuro
 
   /**
    * Formatea una fecha/hora en formato legible
@@ -818,7 +815,7 @@ export default function Calendar() {
                             )}
                           >
                             {deadline.is_overdue
-                              ? `Vencido hace ${Math.abs(deadline.days_remaining)} dias`
+                              ? `Vencido hace ${Math.abs(deadline.days_remaining ?? 0)} dias`
                               : deadline.days_remaining === 0
                               ? 'Hoy'
                               : `${deadline.days_remaining} dias restantes`}

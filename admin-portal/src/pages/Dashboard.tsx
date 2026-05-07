@@ -143,6 +143,7 @@ export default function Dashboard() {
   // Determina si el usuario tiene permisos de administrador
   // Los roles 'admin' y 'partner' (socio) tienen acceso completo
   const isAdmin = user?.role === 'admin' || user?.role === 'partner'
+  void isAdmin // Reservado para uso futuro
 
   /**
    * Query para obtener las estadisticas del dashboard
@@ -152,7 +153,7 @@ export default function Dashboard() {
    * - Revalidacion automatica
    * - Manejo de errores
    */
-  const { data: analytics, isLoading: loadingAnalytics } = useQuery({
+  const { data: analytics, isLoading: _loadingAnalytics } = useQuery({
     // Clave unica para identificar esta query en el cache
     queryKey: ['dashboard'],
     // Funcion que realiza la peticion al servidor

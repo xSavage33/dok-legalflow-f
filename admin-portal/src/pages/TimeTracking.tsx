@@ -45,9 +45,7 @@ import {
   Clock,          // Icono de reloj para representar tiempo
   Pause,          // Icono para pausar temporizador
   X,              // Icono para cerrar modales/cancelar
-  Search,         // Icono de busqueda (no usado actualmente pero importado)
   Filter,         // Icono para mostrar filtros
-  Calendar,       // Icono de calendario (no usado actualmente)
   Briefcase,      // Icono de maletin para representar casos
   DollarSign,     // Icono de dolar para elementos facturables
   CheckCircle,    // Icono de check para confirmar acciones
@@ -56,7 +54,6 @@ import {
   ChevronDown,    // Icono de flecha hacia abajo
   Trash2,         // Icono de papelera para eliminar
   Edit,           // Icono de lapiz para editar
-  MoreVertical,   // Icono de tres puntos verticales (no usado)
 } from 'lucide-react'
 
 // Importacion de hooks de React
@@ -535,6 +532,7 @@ export default function TimeTracking() {
       setShowTimerSettings(true)
     }
   }
+  void handleStartTimer // Reservado para uso futuro
 
   /**
    * Inicia el temporizador rapidamente sin configuracion adicional
@@ -1067,7 +1065,7 @@ export default function TimeTracking() {
                           {formatDuration(entry.duration_minutes)}
                         </span>
                         {entry.is_billable && (
-                          <DollarSign className="h-4 w-4 text-green-500" title="Facturable" />
+                          <span title="Facturable"><DollarSign className="h-4 w-4 text-green-500" /></span>
                         )}
                       </div>
                     </td>
