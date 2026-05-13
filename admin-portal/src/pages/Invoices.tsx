@@ -210,6 +210,21 @@ export default function Invoices() {
   // Factura actualmente seleccionada para ver detalle o registrar pago
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null)
 
+  // Estado para notificaciones/toast
+  const [notification, setNotification] = useState<{
+    show: boolean
+    type: 'success' | 'error'
+    title: string
+    message: string
+  } | null>(null)
+
+  // Funcion para mostrar notificacion temporal
+  const showNotification = (type: 'success' | 'error', title: string, message: string) => {
+    setNotification({ show: true, type, title, message })
+    // Auto-ocultar despues de 5 segundos
+    setTimeout(() => setNotification(null), 5000)
+  }
+
   // ===================================================================
   // ESTADO DEL FORMULARIO DE CREACION
   // ===================================================================
@@ -367,13 +382,26 @@ export default function Invoices() {
       const response = await api.post('/invoices/', data)
       return response.data
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       // Invalida caches para refrescar datos
       queryClient.invalidateQueries({ queryKey: ['invoices'] })
       queryClient.invalidateQueries({ queryKey: ['billingSummary'] })
       // Cierra modal y resetea formulario
       setShowCreateModal(false)
       resetForm()
+      // Mostrar notificacion
+      showNotification(
+        'success',
+        'Factura Creada',
+        `Factura ${data.invoice_number || ''} creada exitosamente`
+      )
+    },
+    onError: () => {
+      showNotification(
+        'error',
+        'Error',
+        'No se pudo crear la factura'
+      )
     },
   })
 
@@ -416,9 +444,32 @@ export default function Invoices() {
       const response = await api.post(`/invoices/${invoiceId}/send/`)
       return response.data
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['invoice', selectedInvoice?.id] })
       queryClient.invalidateQueries({ queryKey: ['invoices'] })
+
+      // Mostrar notificacion segun resultado del email
+      if (data.email?.success) {
+        const recipients = data.email.recipients?.join(', ') || ''
+        showNotification(
+          'success',
+          'Factura Enviada',
+          `Se envio correctamente a ${recipients}`
+        )
+      } else {
+        showNotification(
+          'error',
+          'Error al Enviar',
+          data.email?.message || 'No se pudo enviar el correo'
+        )
+      }
+    },
+    onError: () => {
+      showNotification(
+        'error',
+        'Error',
+        'Ocurrio un error al enviar la factura'
+      )
     },
   })
 
@@ -431,7 +482,7 @@ export default function Invoices() {
       const response = await api.post(`/invoices/${invoiceId}/payments/`, payment)
       return response.data
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       // Invalida caches relacionados
       queryClient.invalidateQueries({ queryKey: ['invoice', selectedInvoice?.id] })
       queryClient.invalidateQueries({ queryKey: ['invoices'] })
@@ -445,6 +496,19 @@ export default function Invoices() {
         reference: '',
         notes: '',
       })
+      // Mostrar notificacion
+      showNotification(
+        'success',
+        'Pago Registrado',
+        `Pago ${data.payment_number || ''} registrado exitosamente`
+      )
+    },
+    onError: () => {
+      showNotification(
+        'error',
+        'Error',
+        'No se pudo registrar el pago'
+      )
     },
   })
 
@@ -644,6 +708,57 @@ export default function Invoices() {
 
   return (
     <div className="space-y-6">
+      {/* =============================================================
+          NOTIFICACION TOAST
+          Muestra mensajes de exito o error temporalmente
+          ============================================================= */}
+      {notification && (
+        <div className="fixed top-4 right-4 z-[100] animate-in slide-in-from-top-2">
+          <div
+            className={clsx(
+              'flex items-start gap-3 p-4 rounded-lg shadow-lg max-w-md',
+              notification.type === 'success'
+                ? 'bg-green-50 border border-green-200'
+                : 'bg-red-50 border border-red-200'
+            )}
+          >
+            {notification.type === 'success' ? (
+              <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+            ) : (
+              <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+            )}
+            <div className="flex-1">
+              <p
+                className={clsx(
+                  'font-medium',
+                  notification.type === 'success' ? 'text-green-800' : 'text-red-800'
+                )}
+              >
+                {notification.title}
+              </p>
+              <p
+                className={clsx(
+                  'text-sm mt-1',
+                  notification.type === 'success' ? 'text-green-700' : 'text-red-700'
+                )}
+              >
+                {notification.message}
+              </p>
+            </div>
+            <button
+              onClick={() => setNotification(null)}
+              className={clsx(
+                'flex-shrink-0',
+                notification.type === 'success'
+                  ? 'text-green-500 hover:text-green-700'
+                  : 'text-red-500 hover:text-red-700'
+              )}
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+      )}
       {/* =============================================================
           SECCION: ENCABEZADO DE LA PAGINA
           Contiene titulo y boton de nueva factura

@@ -6,7 +6,8 @@
  */
 
 // useQuery - Hook de React Query para consultas de datos
-import { useQuery } from '@tanstack/react-query'
+// useQueryClient - Para invalidar queries despues de un pago
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 // api - Cliente HTTP configurado para el backend
 import api from '../services/api'
@@ -20,10 +21,17 @@ import type { Invoice, PaginatedResponse } from '../types'
 // DollarSign: icono de dolar para representar dinero
 // AlertCircle: icono de alerta para pagos pendientes
 // CheckCircle: icono de check para pagos completados
-import { Receipt, Search, DollarSign, AlertCircle, CheckCircle } from 'lucide-react'
+// CreditCard: icono de tarjeta para el boton de pago
+import { Receipt, Search, DollarSign, AlertCircle, CheckCircle, CreditCard } from 'lucide-react'
 
-// useState - Hook para estados locales de busqueda y filtros
-import { useState } from 'react'
+// useState, useEffect - Hooks para estados y efectos
+import { useState, useEffect } from 'react'
+
+// useSearchParams - Hook para leer parametros de URL
+import { useSearchParams } from 'react-router-dom'
+
+// PaymentModal - Modal para procesar pagos con Stripe
+import PaymentModal from '../components/PaymentModal'
 
 // clsx - Utilidad para clases CSS condicionales
 import clsx from 'clsx'
@@ -39,6 +47,11 @@ import clsx from 'clsx'
  * - Tabla detallada con informacion de cada factura
  */
 export default function MyInvoices() {
+  // ========== PARAMETROS DE URL ==========
+
+  // Hook para leer parametros de la URL (para links de pago desde email)
+  const [searchParams, setSearchParams] = useSearchParams()
+
   // ========== ESTADOS LOCALES ==========
 
   // Estado para el termino de busqueda por numero de factura
@@ -46,6 +59,58 @@ export default function MyInvoices() {
 
   // Estado para el filtro de estado de factura
   const [statusFilter, setStatusFilter] = useState('')
+
+  // Estado para controlar el modal de pago
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false)
+
+  // Estado para la factura seleccionada para pagar
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null)
+
+  // Estado para notificaciones
+  const [notification, setNotification] = useState<{
+    show: boolean
+    type: 'success' | 'error'
+    message: string
+  } | null>(null)
+
+  // QueryClient para refrescar datos despues de un pago
+  const queryClient = useQueryClient()
+
+  // ========== FUNCIONES DE PAGO ==========
+
+  /**
+   * Abre el modal de pago para una factura
+   */
+  const handlePayClick = (invoice: Invoice) => {
+    setSelectedInvoice(invoice)
+    setPaymentModalOpen(true)
+  }
+
+  /**
+   * Cierra el modal de pago
+   */
+  const handleClosePaymentModal = () => {
+    setPaymentModalOpen(false)
+    setSelectedInvoice(null)
+  }
+
+  /**
+   * Callback cuando el pago es exitoso
+   */
+  const handlePaymentSuccess = () => {
+    setPaymentModalOpen(false)
+    setSelectedInvoice(null)
+    // Refresca los datos de facturas
+    queryClient.invalidateQueries({ queryKey: ['my-invoices'] })
+    // Muestra notificacion de exito
+    setNotification({
+      show: true,
+      type: 'success',
+      message: '¡Pago procesado exitosamente!',
+    })
+    // Oculta la notificacion despues de 5 segundos
+    setTimeout(() => setNotification(null), 5000)
+  }
 
   // ========== CONSULTA DE FACTURAS ==========
 
@@ -60,6 +125,40 @@ export default function MyInvoices() {
       return response.data
     },
   })
+
+  // ========== EFECTO PARA ABRIR MODAL DESDE URL ==========
+
+  /**
+   * Efecto que detecta el parametro 'pay' en la URL y abre el modal de pago
+   * Esto permite que los links desde emails abran directamente el pago
+   */
+  useEffect(() => {
+    const payInvoiceId = searchParams.get('pay')
+
+    // Si hay parametro 'pay' y las facturas estan cargadas
+    if (payInvoiceId && data?.results) {
+      // Busca la factura por ID
+      const invoiceToPay = data.results.find(inv => inv.id === payInvoiceId)
+
+      // Si encuentra la factura y tiene saldo pendiente, abre el modal
+      if (invoiceToPay && invoiceToPay.balance_due > 0 && invoiceToPay.status !== 'cancelled') {
+        setSelectedInvoice(invoiceToPay)
+        setPaymentModalOpen(true)
+
+        // Limpia el parametro de la URL para evitar reabrir el modal
+        setSearchParams({})
+      } else if (invoiceToPay && invoiceToPay.balance_due === 0) {
+        // Si la factura ya esta pagada, muestra notificacion
+        setNotification({
+          show: true,
+          type: 'success',
+          message: 'Esta factura ya ha sido pagada.',
+        })
+        setTimeout(() => setNotification(null), 5000)
+        setSearchParams({})
+      }
+    }
+  }, [data, searchParams, setSearchParams])
 
   // ========== MAPEOS DE ETIQUETAS Y COLORES ==========
 
@@ -110,18 +209,16 @@ export default function MyInvoices() {
   const totalOutstanding = data?.results
     // Filtra facturas que no estan pagadas ni canceladas
     .filter((i) => i.status !== 'paid' && i.status !== 'cancelled')
-    // Suma todos los saldos pendientes (balance_due)
-    .reduce((sum, i) => sum + i.balance_due, 0) || 0
+    // Suma todos los saldos pendientes (balance_due), protegiendo contra NaN
+    .reduce((sum, i) => sum + (Number(i.balance_due) || 0), 0) || 0
 
   /**
-   * Calcula el total de facturas ya pagadas
-   * Solo considera facturas con estado 'paid'
+   * Calcula el total de pagos recibidos
+   * Suma amount_paid de todas las facturas (incluye pagos parciales)
    */
   const totalPaid = data?.results
-    // Filtra solo facturas pagadas
-    .filter((i) => i.status === 'paid')
-    // Suma todos los montos totales
-    .reduce((sum, i) => sum + i.total_amount, 0) || 0
+    // Suma todos los montos pagados, protegiendo contra NaN
+    .reduce((sum, i) => sum + (Number(i.amount_paid) || 0), 0) || 0
 
   // ========== ESTADO DE CARGA ==========
 
@@ -138,6 +235,31 @@ export default function MyInvoices() {
 
   return (
     <div className="space-y-6">
+      {/* ========== NOTIFICACION TOAST ========== */}
+      {notification && (
+        <div
+          className={clsx(
+            'fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg transition-all duration-300',
+            notification.type === 'success'
+              ? 'bg-green-50 border border-green-200 text-green-800'
+              : 'bg-red-50 border border-red-200 text-red-800'
+          )}
+        >
+          {notification.type === 'success' ? (
+            <CheckCircle className="h-5 w-5 text-green-600" />
+          ) : (
+            <AlertCircle className="h-5 w-5 text-red-600" />
+          )}
+          <span className="font-medium">{notification.message}</span>
+          <button
+            onClick={() => setNotification(null)}
+            className="ml-2 text-gray-400 hover:text-gray-600"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {/* Titulo de la pagina */}
       <h1 className="text-2xl font-bold text-gray-900">Mis Facturas</h1>
 
@@ -262,6 +384,10 @@ export default function MyInvoices() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Estado
                   </th>
+                  {/* Columna: Acciones (Pagar) */}
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Acciones
+                  </th>
                 </tr>
               </thead>
 
@@ -315,12 +441,38 @@ export default function MyInvoices() {
                         {statusLabels[invoice.status] || invoice.status}
                       </span>
                     </td>
+
+                    {/* Celda: Boton de pagar */}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {/* Solo mostrar boton si hay saldo pendiente y no esta cancelada */}
+                      {invoice.balance_due > 0 && invoice.status !== 'cancelled' ? (
+                        <button
+                          onClick={() => handlePayClick(invoice)}
+                          className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors"
+                        >
+                          <CreditCard className="h-4 w-4" />
+                          Pagar
+                        </button>
+                      ) : (
+                        <span className="text-gray-400 text-sm">-</span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
+      )}
+
+      {/* ========== MODAL DE PAGO ========== */}
+      {selectedInvoice && (
+        <PaymentModal
+          invoice={selectedInvoice}
+          isOpen={paymentModalOpen}
+          onClose={handleClosePaymentModal}
+          onSuccess={handlePaymentSuccess}
+        />
       )}
     </div>
   )
