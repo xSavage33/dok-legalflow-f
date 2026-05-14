@@ -20,11 +20,12 @@ import type { Invoice } from '../types'
 
 /**
  * Carga la instancia de Stripe con la publishable key
- * Se obtiene de las variables de entorno de Vite
+ * Se obtiene de las variables de entorno de Vite o usa el valor por defecto
  */
-const stripePromise = loadStripe(
-  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || ''
-)
+const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ||
+  'pk_test_51TKHzbKWZuN4peiisjfQKQ2jRbYrOI73nwUBTCBUzgLwAoJK4YFFi8aCpwKTsiT6oTe1ZKD0gShzcBEIKHy3w1Hv00W6LQWjSt'
+
+const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY)
 
 // ========== INTERFACES ==========
 
