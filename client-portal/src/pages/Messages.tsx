@@ -17,8 +17,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 // api - Cliente HTTP configurado
 import api from '../services/api'
 
-// Tipos TypeScript para mensajes y respuestas paginadas
-import type { Message, PaginatedResponse } from '../types'
+// Tipos TypeScript para mensajes, casos y respuestas paginadas
+import type { Message, Case, PaginatedResponse } from '../types'
 
 // Iconos de Lucide React
 // MessageSquare: icono de mensaje
@@ -51,13 +51,31 @@ export default function Messages() {
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
 
   // Estado del formulario de nuevo mensaje
-  const [newMessage, setNewMessage] = useState({ subject: '', content: '' })
+  const [newMessage, setNewMessage] = useState({
+    subject: '',
+    content: '',
+    case_id: '',
+    case_number: ''
+  })
 
   // Controla si el modal de composicion esta visible
   const [showCompose, setShowCompose] = useState(false)
 
   // Cliente de React Query para invalidar cache
   const queryClient = useQueryClient()
+
+  // ========== CONSULTA DE CASOS ==========
+
+  /**
+   * Consulta para obtener los casos del cliente (para el selector)
+   */
+  const { data: cases } = useQuery({
+    queryKey: ['my-cases'],
+    queryFn: async () => {
+      const response = await api.get<PaginatedResponse<Case>>('/portal/my-cases/')
+      return response.data
+    },
+  })
 
   // ========== CONSULTA DE MENSAJES ==========
 
@@ -96,15 +114,24 @@ export default function Messages() {
    * Mutacion para enviar un nuevo mensaje
    */
   const sendMessage = useMutation({
-    mutationFn: async (data: { subject: string; content: string }) => {
+    mutationFn: async (data: { subject: string; content: string; case_id?: string; case_number?: string }) => {
+      // Filtrar campos vacios antes de enviar
+      const payload: Record<string, string> = {
+        subject: data.subject,
+        content: data.content
+      }
+      if (data.case_id) {
+        payload.case_id = data.case_id
+        payload.case_number = data.case_number || ''
+      }
       // Peticion POST con el contenido del mensaje
-      await api.post('/portal/messages/', data)
+      await api.post('/portal/messages/', payload)
     },
     onSuccess: () => {
       // Invalida el cache para refrescar la lista
       queryClient.invalidateQueries({ queryKey: ['my-messages'] })
       // Limpia el formulario
-      setNewMessage({ subject: '', content: '' })
+      setNewMessage({ subject: '', content: '', case_id: '', case_number: '' })
       // Cierra el modal de composicion
       setShowCompose(false)
     },
@@ -202,6 +229,32 @@ export default function Messages() {
               }}
               className="p-4 space-y-4"
             >
+              {/* Selector de caso (opcional) */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Caso relacionado <span className="text-gray-400">(opcional)</span>
+                </label>
+                <select
+                  value={newMessage.case_id}
+                  onChange={(e) => {
+                    const selectedCase = cases?.results.find(c => c.id === e.target.value)
+                    setNewMessage({
+                      ...newMessage,
+                      case_id: e.target.value,
+                      case_number: selectedCase?.case_number || ''
+                    })
+                  }}
+                  className="input mt-1"
+                >
+                  <option value="">-- Sin caso especifico --</option>
+                  {cases?.results.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.case_number} - {c.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {/* Campo de asunto */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">Asunto</label>
