@@ -20,7 +20,9 @@ COPY . .
 
 # Variables de entorno para el build
 ARG VITE_API_URL=http://localhost:8000
+ARG VITE_STRIPE_PUBLISHABLE_KEY
 ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_STRIPE_PUBLISHABLE_KEY=$VITE_STRIPE_PUBLISHABLE_KEY
 
 # Build de produccion
 RUN npm run build
