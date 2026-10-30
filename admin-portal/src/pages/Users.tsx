@@ -636,7 +636,7 @@ export default function Users() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-full items-end sm:items-center justify-center p-4">
             {/* Overlay oscuro - cierra el modal al hacer click */}
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={closeModal} />
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" role="button" tabIndex={0} onClick={closeModal} onKeyDown={(e) => e.key === 'Enter' && closeModal()} aria-label="Cerrar modal" />
 
             {/* Contenedor del modal */}
             <div className="relative bg-white rounded-lg shadow-xl w-full max-w-lg transform transition-all">
@@ -665,8 +665,9 @@ export default function Users() {
                   {/* Campos de nombre y apellido (en dos columnas) */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
+                      <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
                       <input
+                        id="first_name"
                         type="text"
                         name="first_name"
                         value={formData.first_name}
@@ -676,8 +677,9 @@ export default function Users() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Apellido *</label>
+                      <label htmlFor="last_name" className="block text-sm font-medium text-gray-700 mb-1">Apellido *</label>
                       <input
+                        id="last_name"
                         type="text"
                         name="last_name"
                         value={formData.last_name}
@@ -690,10 +692,11 @@ export default function Users() {
 
                   {/* Campo de email - deshabilitado en modo edicion */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                       Email {!editingUser && '*'}
                     </label>
                     <input
+                      id="email"
                       type="email"
                       name="email"
                       value={formData.email}
@@ -706,12 +709,13 @@ export default function Users() {
 
                   {/* Campo de contrasena */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                       Contrasena {!editingUser && '*'}
                       {/* Nota para modo edicion */}
                       {editingUser && <span className="text-gray-400 font-normal"> (dejar vacio para no cambiar)</span>}
                     </label>
                     <input
+                      id="password"
                       type="password"
                       name="password"
                       value={formData.password}
@@ -725,8 +729,9 @@ export default function Users() {
                   {/* Campos de telefono y rol (en dos columnas) */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Telefono</label>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Telefono</label>
                       <input
+                        id="phone"
                         type="tel"
                         name="phone"
                         value={formData.phone}
@@ -735,8 +740,9 @@ export default function Users() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Rol *</label>
+                      <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">Rol *</label>
                       <select
+                        id="role"
                         name="role"
                         value={formData.role}
                         onChange={handleChange}
@@ -797,7 +803,7 @@ export default function Users() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-full items-end sm:items-center justify-center p-4">
             {/* Overlay oscuro */}
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setShowConfirmModal(false)} />
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" role="button" tabIndex={0} onClick={() => setShowConfirmModal(false)} onKeyDown={(e) => e.key === 'Enter' && setShowConfirmModal(false)} aria-label="Cerrar modal" />
 
             {/* Contenedor del modal */}
             <div className="relative bg-white rounded-lg shadow-xl w-full max-w-md transform transition-all">

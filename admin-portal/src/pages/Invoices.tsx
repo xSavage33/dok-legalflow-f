@@ -977,7 +977,7 @@ export default function Invoices() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
             {/* Overlay oscuro */}
-            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setShowCreateModal(false)} />
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" role="button" tabIndex={0} onClick={() => setShowCreateModal(false)} onKeyDown={(e) => e.key === 'Enter' && setShowCreateModal(false)} aria-label="Cerrar modal" />
             {/* Contenedor del modal */}
             <div className="relative bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
               {/* Encabezado del modal */}
@@ -994,8 +994,9 @@ export default function Invoices() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Selector de cliente (requerido) */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Cliente *</label>
+                    <label htmlFor="invoice-client" className="block text-sm font-medium text-gray-700 mb-1">Cliente *</label>
                     <select
+                      id="invoice-client"
                       value={invoiceForm.client_id}
                       onChange={(e) => handleClientSelect(e.target.value)}
                       className="input"
@@ -1010,8 +1011,9 @@ export default function Invoices() {
                   </div>
                   {/* Selector de caso (opcional) - Solo muestra casos del cliente seleccionado */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Caso</label>
+                    <label htmlFor="invoice-case" className="block text-sm font-medium text-gray-700 mb-1">Caso</label>
                     <select
+                      id="invoice-case"
                       value={invoiceForm.case_id}
                       onChange={(e) => handleCaseSelect(e.target.value)}
                       className="input"
@@ -1036,8 +1038,9 @@ export default function Invoices() {
                 {/* Seccion: Fechas de emision y vencimiento */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Fecha Emision *</label>
+                    <label htmlFor="invoice-issue-date" className="block text-sm font-medium text-gray-700 mb-1">Fecha Emision *</label>
                     <input
+                      id="invoice-issue-date"
                       type="date"
                       value={invoiceForm.issue_date}
                       onChange={(e) => setInvoiceForm((prev) => ({ ...prev, issue_date: e.target.value }))}
@@ -1045,8 +1048,9 @@ export default function Invoices() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Fecha Vencimiento *</label>
+                    <label htmlFor="invoice-due-date" className="block text-sm font-medium text-gray-700 mb-1">Fecha Vencimiento *</label>
                     <input
+                      id="invoice-due-date"
                       type="date"
                       value={invoiceForm.due_date}
                       onChange={(e) => setInvoiceForm((prev) => ({ ...prev, due_date: e.target.value }))}
@@ -1084,7 +1088,7 @@ export default function Invoices() {
                             type="number"
                             min="1"
                             value={item.quantity || ''}
-                            onChange={(e) => updateItem(index, 'quantity', e.target.value === '' ? 0 : parseFloat(e.target.value))}
+                            onChange={(e) => updateItem(index, 'quantity', e.target.value === '' ? 0 : Number.parseFloat(e.target.value))}
                             className="input text-center"
                             placeholder="1"
                           />
@@ -1096,7 +1100,7 @@ export default function Invoices() {
                             min="0"
                             step="0.01"
                             value={item.unit_price || ''}
-                            onChange={(e) => updateItem(index, 'unit_price', e.target.value === '' ? 0 : parseFloat(e.target.value))}
+                            onChange={(e) => updateItem(index, 'unit_price', e.target.value === '' ? 0 : Number.parseFloat(e.target.value))}
                             className="input text-right"
                             placeholder="0.00"
                           />
@@ -1122,14 +1126,15 @@ export default function Invoices() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Campo: Tasa de impuesto */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Impuesto (%)</label>
+                    <label htmlFor="invoice-tax" className="block text-sm font-medium text-gray-700 mb-1">Impuesto (%)</label>
                     <input
+                      id="invoice-tax"
                       type="number"
                       min="0"
                       max="100"
                       value={invoiceForm.tax_rate || ''}
                       onChange={(e) =>
-                        setInvoiceForm((prev) => ({ ...prev, tax_rate: e.target.value === '' ? 0 : parseFloat(e.target.value) }))
+                        setInvoiceForm((prev) => ({ ...prev, tax_rate: e.target.value === '' ? 0 : Number.parseFloat(e.target.value) }))
                       }
                       className="input"
                       placeholder="0"
@@ -1137,13 +1142,14 @@ export default function Invoices() {
                   </div>
                   {/* Campo: Monto de descuento */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Descuento ($)</label>
+                    <label htmlFor="invoice-discount" className="block text-sm font-medium text-gray-700 mb-1">Descuento ($)</label>
                     <input
+                      id="invoice-discount"
                       type="number"
                       min="0"
                       value={invoiceForm.discount_amount || ''}
                       onChange={(e) =>
-                        setInvoiceForm((prev) => ({ ...prev, discount_amount: e.target.value === '' ? 0 : parseFloat(e.target.value) }))
+                        setInvoiceForm((prev) => ({ ...prev, discount_amount: e.target.value === '' ? 0 : Number.parseFloat(e.target.value) }))
                       }
                       className="input"
                       placeholder="0.00"
@@ -1153,8 +1159,9 @@ export default function Invoices() {
 
                 {/* Seccion: Notas adicionales */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Notas</label>
+                  <label htmlFor="invoice-notes" className="block text-sm font-medium text-gray-700 mb-1">Notas</label>
                   <textarea
+                    id="invoice-notes"
                     value={invoiceForm.notes}
                     onChange={(e) => setInvoiceForm((prev) => ({ ...prev, notes: e.target.value }))}
                     className="input"
@@ -1242,7 +1249,7 @@ export default function Invoices() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
             {/* Overlay oscuro */}
-            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setShowDetailModal(false)} />
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" role="button" tabIndex={0} onClick={() => setShowDetailModal(false)} onKeyDown={(e) => e.key === 'Enter' && setShowDetailModal(false)} aria-label="Cerrar modal" />
             {/* Contenedor del modal */}
             <div className="relative bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col">
               {/* Encabezado con numero de factura y estado */}
@@ -1461,7 +1468,7 @@ export default function Invoices() {
         <div className="fixed inset-0 z-[60] overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
             {/* Overlay oscuro */}
-            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setShowPaymentModal(false)} />
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" role="button" tabIndex={0} onClick={() => setShowPaymentModal(false)} onKeyDown={(e) => e.key === 'Enter' && setShowPaymentModal(false)} aria-label="Cerrar modal" />
             {/* Contenedor del modal */}
             <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
               {/* Encabezado */}
@@ -1486,15 +1493,16 @@ export default function Invoices() {
 
                 {/* Campo: Monto del pago */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Monto *</label>
+                  <label htmlFor="payment-amount" className="block text-sm font-medium text-gray-700 mb-1">Monto *</label>
                   <input
+                    id="payment-amount"
                     type="number"
                     min="0"
                     max={selectedInvoice.balance_due}
                     step="0.01"
                     value={paymentForm.amount}
                     onChange={(e) =>
-                      setPaymentForm((prev) => ({ ...prev, amount: parseFloat(e.target.value) || 0 }))
+                      setPaymentForm((prev) => ({ ...prev, amount: Number.parseFloat(e.target.value) || 0 }))
                     }
                     className="input"
                   />
@@ -1503,8 +1511,9 @@ export default function Invoices() {
                 {/* Campos: Metodo de pago y fecha */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Metodo *</label>
+                    <label htmlFor="payment-method" className="block text-sm font-medium text-gray-700 mb-1">Metodo *</label>
                     <select
+                      id="payment-method"
                       value={paymentForm.method}
                       onChange={(e) => setPaymentForm((prev) => ({ ...prev, method: e.target.value }))}
                       className="input"
@@ -1517,8 +1526,9 @@ export default function Invoices() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Fecha *</label>
+                    <label htmlFor="payment-date" className="block text-sm font-medium text-gray-700 mb-1">Fecha *</label>
                     <input
+                      id="payment-date"
                       type="date"
                       value={paymentForm.payment_date}
                       onChange={(e) => setPaymentForm((prev) => ({ ...prev, payment_date: e.target.value }))}
@@ -1529,8 +1539,9 @@ export default function Invoices() {
 
                 {/* Campo: Referencia */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Referencia</label>
+                  <label htmlFor="payment-reference" className="block text-sm font-medium text-gray-700 mb-1">Referencia</label>
                   <input
+                    id="payment-reference"
                     type="text"
                     value={paymentForm.reference}
                     onChange={(e) => setPaymentForm((prev) => ({ ...prev, reference: e.target.value }))}
@@ -1541,8 +1552,9 @@ export default function Invoices() {
 
                 {/* Campo: Notas */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Notas</label>
+                  <label htmlFor="payment-notes" className="block text-sm font-medium text-gray-700 mb-1">Notas</label>
                   <textarea
+                    id="payment-notes"
                     value={paymentForm.notes}
                     onChange={(e) => setPaymentForm((prev) => ({ ...prev, notes: e.target.value }))}
                     className="input"

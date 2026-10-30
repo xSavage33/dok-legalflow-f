@@ -636,7 +636,7 @@ export default function Calendar() {
             <span className="text-sm text-gray-500">Mostrar proximos:</span>
             <select
               value={daysRange}
-              onChange={(e) => setDaysRange(parseInt(e.target.value))}
+              onChange={(e) => setDaysRange(Number.parseInt(e.target.value, 10))}
               className="input w-32"
             >
               <option value={7}>7 dias</option>
@@ -874,7 +874,7 @@ export default function Calendar() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
             {/* Overlay oscuro */}
-            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setShowEventModal(false)} />
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" role="button" tabIndex={0} onClick={() => setShowEventModal(false)} onKeyDown={(e) => e.key === 'Enter' && setShowEventModal(false)} aria-label="Cerrar modal" />
             {/* Contenedor del modal */}
             <div className="relative bg-white rounded-xl shadow-xl max-w-lg w-full p-6">
               {/* Encabezado */}
@@ -889,8 +889,9 @@ export default function Calendar() {
               <div className="space-y-4">
                 {/* Campo: Titulo */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Titulo *</label>
+                  <label htmlFor="event-title" className="block text-sm font-medium text-gray-700 mb-1">Titulo *</label>
                   <input
+                    id="event-title"
                     type="text"
                     value={eventForm.title}
                     onChange={(e) => setEventForm((prev) => ({ ...prev, title: e.target.value }))}
@@ -902,8 +903,9 @@ export default function Calendar() {
                 {/* Campos: Tipo de evento y Caso */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Tipo *</label>
+                    <label htmlFor="event-type" className="block text-sm font-medium text-gray-700 mb-1">Tipo *</label>
                     <select
+                      id="event-type"
                       value={eventForm.event_type}
                       onChange={(e) => setEventForm((prev) => ({ ...prev, event_type: e.target.value }))}
                       className="input"
@@ -916,8 +918,9 @@ export default function Calendar() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Caso</label>
+                    <label htmlFor="event-case" className="block text-sm font-medium text-gray-700 mb-1">Caso</label>
                     <select
+                      id="event-case"
                       value={eventForm.case_id}
                       onChange={(e) => handleCaseSelectEvent(e.target.value)}
                       className="input"
@@ -935,8 +938,9 @@ export default function Calendar() {
                 {/* Campos: Fecha/hora inicio y fin */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Fecha/Hora Inicio *</label>
+                    <label htmlFor="event-start" className="block text-sm font-medium text-gray-700 mb-1">Fecha/Hora Inicio *</label>
                     <input
+                      id="event-start"
                       type="datetime-local"
                       value={eventForm.start_datetime}
                       onChange={(e) => setEventForm((prev) => ({ ...prev, start_datetime: e.target.value }))}
@@ -944,8 +948,9 @@ export default function Calendar() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Fecha/Hora Fin</label>
+                    <label htmlFor="event-end" className="block text-sm font-medium text-gray-700 mb-1">Fecha/Hora Fin</label>
                     <input
+                      id="event-end"
                       type="datetime-local"
                       value={eventForm.end_datetime}
                       onChange={(e) => setEventForm((prev) => ({ ...prev, end_datetime: e.target.value }))}
@@ -956,8 +961,9 @@ export default function Calendar() {
 
                 {/* Campo: Ubicacion */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Ubicacion</label>
+                  <label htmlFor="event-location" className="block text-sm font-medium text-gray-700 mb-1">Ubicacion</label>
                   <input
+                    id="event-location"
                     type="text"
                     value={eventForm.location}
                     onChange={(e) => setEventForm((prev) => ({ ...prev, location: e.target.value }))}
@@ -968,8 +974,9 @@ export default function Calendar() {
 
                 {/* Campo: Descripcion */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Descripcion</label>
+                  <label htmlFor="event-description" className="block text-sm font-medium text-gray-700 mb-1">Descripcion</label>
                   <textarea
+                    id="event-description"
                     value={eventForm.description}
                     onChange={(e) => setEventForm((prev) => ({ ...prev, description: e.target.value }))}
                     className="input"
@@ -1034,7 +1041,7 @@ export default function Calendar() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
             {/* Overlay oscuro */}
-            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setShowDeadlineModal(false)} />
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" role="button" tabIndex={0} onClick={() => setShowDeadlineModal(false)} onKeyDown={(e) => e.key === 'Enter' && setShowDeadlineModal(false)} aria-label="Cerrar modal" />
             {/* Contenedor del modal */}
             <div className="relative bg-white rounded-xl shadow-xl max-w-lg w-full p-6">
               {/* Encabezado */}
@@ -1049,8 +1056,9 @@ export default function Calendar() {
               <div className="space-y-4">
                 {/* Campo: Titulo */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Titulo *</label>
+                  <label htmlFor="deadline-title" className="block text-sm font-medium text-gray-700 mb-1">Titulo *</label>
                   <input
+                    id="deadline-title"
                     type="text"
                     value={deadlineForm.title}
                     onChange={(e) => setDeadlineForm((prev) => ({ ...prev, title: e.target.value }))}
@@ -1062,8 +1070,9 @@ export default function Calendar() {
                 {/* Campos: Prioridad y Caso */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Prioridad *</label>
+                    <label htmlFor="deadline-priority" className="block text-sm font-medium text-gray-700 mb-1">Prioridad *</label>
                     <select
+                      id="deadline-priority"
                       value={deadlineForm.priority}
                       onChange={(e) => setDeadlineForm((prev) => ({ ...prev, priority: e.target.value }))}
                       className="input"
@@ -1076,8 +1085,9 @@ export default function Calendar() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Caso</label>
+                    <label htmlFor="deadline-case" className="block text-sm font-medium text-gray-700 mb-1">Caso</label>
                     <select
+                      id="deadline-case"
                       value={deadlineForm.case_id}
                       onChange={(e) => handleCaseSelectDeadline(e.target.value)}
                       className="input"
@@ -1098,8 +1108,9 @@ export default function Calendar() {
                   <div className="flex gap-3 items-end">
                     {/* Campo: Fecha inicial */}
                     <div className="flex-1">
-                      <label className="block text-xs text-gray-500 mb-1">Desde</label>
+                      <label htmlFor="calc-start-date" className="block text-xs text-gray-500 mb-1">Desde</label>
                       <input
+                        id="calc-start-date"
                         type="date"
                         value={calcForm.start_date}
                         onChange={(e) => setCalcForm((prev) => ({ ...prev, start_date: e.target.value }))}
@@ -1108,13 +1119,14 @@ export default function Calendar() {
                     </div>
                     {/* Campo: Dias habiles */}
                     <div className="w-24">
-                      <label className="block text-xs text-gray-500 mb-1">Dias habiles</label>
+                      <label htmlFor="calc-business-days" className="block text-xs text-gray-500 mb-1">Dias habiles</label>
                       <input
+                        id="calc-business-days"
                         type="number"
                         min="1"
                         value={calcForm.business_days}
                         onChange={(e) =>
-                          setCalcForm((prev) => ({ ...prev, business_days: parseInt(e.target.value) || 1 }))
+                          setCalcForm((prev) => ({ ...prev, business_days: Number.parseInt(e.target.value, 10) || 1 }))
                         }
                         className="input"
                       />
@@ -1138,8 +1150,9 @@ export default function Calendar() {
 
                 {/* Campo: Fecha de vencimiento */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Vencimiento *</label>
+                  <label htmlFor="deadline-due-date" className="block text-sm font-medium text-gray-700 mb-1">Fecha de Vencimiento *</label>
                   <input
+                    id="deadline-due-date"
                     type="date"
                     value={deadlineForm.due_date}
                     onChange={(e) => setDeadlineForm((prev) => ({ ...prev, due_date: e.target.value }))}
@@ -1149,8 +1162,9 @@ export default function Calendar() {
 
                 {/* Campo: Usuario asignado */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Asignar a</label>
+                  <label htmlFor="deadline-assigned-to" className="block text-sm font-medium text-gray-700 mb-1">Asignar a</label>
                   <select
+                    id="deadline-assigned-to"
                     value={deadlineForm.assigned_to_id}
                     onChange={(e) => handleUserSelect(e.target.value)}
                     className="input"
@@ -1166,8 +1180,9 @@ export default function Calendar() {
 
                 {/* Campo: Descripcion */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Descripcion</label>
+                  <label htmlFor="deadline-description" className="block text-sm font-medium text-gray-700 mb-1">Descripcion</label>
                   <textarea
+                    id="deadline-description"
                     value={deadlineForm.description}
                     onChange={(e) => setDeadlineForm((prev) => ({ ...prev, description: e.target.value }))}
                     className="input"
@@ -1221,7 +1236,7 @@ export default function Calendar() {
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
             {/* Overlay oscuro */}
-            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setShowExtendModal(false)} />
+            <div className="fixed inset-0 bg-gray-600 bg-opacity-75" role="button" tabIndex={0} onClick={() => setShowExtendModal(false)} onKeyDown={(e) => e.key === 'Enter' && setShowExtendModal(false)} aria-label="Cerrar modal" />
             {/* Contenedor del modal */}
             <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
               {/* Encabezado */}
@@ -1244,8 +1259,9 @@ export default function Calendar() {
 
                 {/* Campo: Nueva fecha de vencimiento */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Nueva Fecha de Vencimiento *</label>
+                  <label htmlFor="extend-new-date" className="block text-sm font-medium text-gray-700 mb-1">Nueva Fecha de Vencimiento *</label>
                   <input
+                    id="extend-new-date"
                     type="date"
                     value={extendDate}
                     onChange={(e) => setExtendDate(e.target.value)}

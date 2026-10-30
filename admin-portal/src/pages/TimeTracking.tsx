@@ -1208,7 +1208,7 @@ export default function TimeTracking() {
                           min="0"
                           value={entryForm.hours}
                           onChange={(e) =>
-                            setEntryForm((prev) => ({ ...prev, hours: parseInt(e.target.value) || 0 }))
+                            setEntryForm((prev) => ({ ...prev, hours: Number.parseInt(e.target.value, 10) || 0 }))
                           }
                           className="input"
                           placeholder="0"
@@ -1223,7 +1223,7 @@ export default function TimeTracking() {
                           max="59"
                           value={entryForm.minutes}
                           onChange={(e) =>
-                            setEntryForm((prev) => ({ ...prev, minutes: parseInt(e.target.value) || 0 }))
+                            setEntryForm((prev) => ({ ...prev, minutes: Number.parseInt(e.target.value, 10) || 0 }))
                           }
                           className="input"
                           placeholder="0"

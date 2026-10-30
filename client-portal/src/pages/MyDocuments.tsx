@@ -171,7 +171,7 @@ export default function MyDocuments() {
     const i = Math.floor(Math.log(bytes) / Math.log(k))
 
     // Calcula el valor y formatea con 2 decimales
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+    return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
 
   // ========== ESTADO DE CARGA ==========
