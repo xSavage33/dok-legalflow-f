@@ -522,8 +522,9 @@ export default function Messages() {
 
             {/* Selector de filtro por caso */}
             <div>
-              <label className="block text-xs text-gray-500 mb-1">Caso</label>
+              <label htmlFor="filter-case" className="block text-xs text-gray-500 mb-1">Caso</label>
               <select
+                id="filter-case"
                 value={selectedCaseId}
                 onChange={(e) => setSelectedCaseId(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 text-sm"
@@ -650,7 +651,11 @@ export default function Messages() {
                   {filteredMessages.map(message => (
                     <div
                       key={message.id}
+                      role="button"
+                      tabIndex={0}
                       onClick={() => handleViewMessage(message)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleViewMessage(message)}
+                      aria-label={`Ver mensaje: ${message.subject}`}
                       className={clsx(
                         'p-4 cursor-pointer hover:bg-gray-50 transition-colors',
                         // Fondo azul claro para mensajes no leidos en inbox
@@ -747,7 +752,7 @@ export default function Messages() {
 
               {/* Campo de destinatario */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="compose-recipient" className="block text-sm font-medium text-gray-700 mb-1">
                   Para *
                 </label>
                 {replyToMessage ? (
@@ -758,6 +763,7 @@ export default function Messages() {
                 ) : (
                   /* En modo nuevo mensaje, muestra selector de usuarios */
                   <select
+                    id="compose-recipient"
                     value={composeForm.recipient_id}
                     onChange={(e) => handleRecipientChange(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
@@ -778,7 +784,7 @@ export default function Messages() {
 
               {/* Campo de caso asociado (opcional) */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="compose-case" className="block text-sm font-medium text-gray-700 mb-1">
                   Caso (opcional)
                 </label>
                 {replyToMessage && composeForm.case_id ? (
@@ -789,6 +795,7 @@ export default function Messages() {
                 ) : (
                   /* Selector de casos */
                   <select
+                    id="compose-case"
                     value={composeForm.case_id}
                     onChange={(e) => handleCaseChange(e.target.value)}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
@@ -805,10 +812,11 @@ export default function Messages() {
 
               {/* Campo de asunto */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="compose-subject" className="block text-sm font-medium text-gray-700 mb-1">
                   Asunto *
                 </label>
                 <input
+                  id="compose-subject"
                   type="text"
                   value={composeForm.subject}
                   onChange={(e) => setComposeForm({ ...composeForm, subject: e.target.value })}
@@ -820,10 +828,11 @@ export default function Messages() {
 
               {/* Campo de contenido del mensaje */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="compose-content" className="block text-sm font-medium text-gray-700 mb-1">
                   Mensaje *
                 </label>
                 <textarea
+                  id="compose-content"
                   value={composeForm.content}
                   onChange={(e) => setComposeForm({ ...composeForm, content: e.target.value })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 min-h-[200px]"

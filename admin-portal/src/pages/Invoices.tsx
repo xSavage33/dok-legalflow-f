@@ -1062,7 +1062,7 @@ export default function Invoices() {
                 {/* Seccion: Items de la factura */}
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <label className="block text-sm font-medium text-gray-700">Items de la Factura *</label>
+                    <span className="block text-sm font-medium text-gray-700">Items de la Factura *</span>
                     {/* Boton para agregar mas items */}
                     <button type="button" onClick={addItem} className="text-sm text-primary-600 hover:text-primary-700">
                       + Agregar item

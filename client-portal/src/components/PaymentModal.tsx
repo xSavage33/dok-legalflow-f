@@ -278,8 +278,12 @@ export default function PaymentModal({ invoice, isOpen, onClose, onSuccess }: Pa
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Overlay oscuro */}
       <div
+        role="button"
+        tabIndex={0}
         className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
         onClick={handleClose}
+        onKeyDown={(e) => (e.key === 'Enter' || e.key === 'Escape') && handleClose()}
+        aria-label="Cerrar modal"
       />
 
       {/* Contenedor del modal */}

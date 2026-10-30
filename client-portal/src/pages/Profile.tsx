@@ -173,9 +173,10 @@ export default function Profile() {
         >
           {/* Campo de email (solo lectura) */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="profile-email" className="block text-sm font-medium text-gray-700">Email</label>
             {/* Input deshabilitado con fondo gris para indicar que no es editable */}
             <input
+              id="profile-email"
               type="email"
               value={user?.email || ''}
               disabled
@@ -187,8 +188,9 @@ export default function Profile() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Campo de nombre */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Nombre</label>
+              <label htmlFor="profile-firstname" className="block text-sm font-medium text-gray-700">Nombre</label>
               <input
+                id="profile-firstname"
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -198,8 +200,9 @@ export default function Profile() {
 
             {/* Campo de apellido */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Apellido</label>
+              <label htmlFor="profile-lastname" className="block text-sm font-medium text-gray-700">Apellido</label>
               <input
+                id="profile-lastname"
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
@@ -210,8 +213,9 @@ export default function Profile() {
 
           {/* Campo de telefono */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Telefono</label>
+            <label htmlFor="profile-phone" className="block text-sm font-medium text-gray-700">Telefono</label>
             <input
+              id="profile-phone"
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -268,8 +272,9 @@ export default function Profile() {
         >
           {/* Campo de contrasena actual */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Contrasena Actual</label>
+            <label htmlFor="password-current" className="block text-sm font-medium text-gray-700">Contrasena Actual</label>
             <input
+              id="password-current"
               type="password"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
@@ -280,8 +285,9 @@ export default function Profile() {
 
           {/* Campo de nueva contrasena */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Nueva Contrasena</label>
+            <label htmlFor="password-new" className="block text-sm font-medium text-gray-700">Nueva Contrasena</label>
             <input
+              id="password-new"
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -292,8 +298,9 @@ export default function Profile() {
 
           {/* Campo de confirmacion de nueva contrasena */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Confirmar Nueva Contrasena</label>
+            <label htmlFor="password-confirm" className="block text-sm font-medium text-gray-700">Confirmar Nueva Contrasena</label>
             <input
+              id="password-confirm"
               type="password"
               value={newPasswordConfirm}
               onChange={(e) => setNewPasswordConfirm(e.target.value)}

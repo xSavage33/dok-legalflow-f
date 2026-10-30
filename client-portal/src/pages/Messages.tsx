@@ -231,10 +231,11 @@ export default function Messages() {
             >
               {/* Selector de caso (opcional) */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">
+                <label htmlFor="message-case" className="block text-sm font-medium text-gray-700">
                   Caso relacionado <span className="text-gray-400">(opcional)</span>
                 </label>
                 <select
+                  id="message-case"
                   value={newMessage.case_id}
                   onChange={(e) => {
                     const selectedCase = cases?.results.find(c => c.id === e.target.value)
@@ -257,8 +258,9 @@ export default function Messages() {
 
               {/* Campo de asunto */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">Asunto</label>
+                <label htmlFor="message-subject" className="block text-sm font-medium text-gray-700">Asunto</label>
                 <input
+                  id="message-subject"
                   type="text"
                   value={newMessage.subject}
                   // Actualiza el estado manteniendo los otros campos
@@ -270,8 +272,9 @@ export default function Messages() {
 
               {/* Campo de contenido del mensaje */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">Mensaje</label>
+                <label htmlFor="message-content" className="block text-sm font-medium text-gray-700">Mensaje</label>
                 <textarea
+                  id="message-content"
                   value={newMessage.content}
                   onChange={(e) => setNewMessage({ ...newMessage, content: e.target.value })}
                   // h-32: altura fija, resize-none: no redimensionable

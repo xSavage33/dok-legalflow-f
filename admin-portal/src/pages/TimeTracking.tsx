@@ -794,8 +794,9 @@ export default function TimeTracking() {
           <div className="mt-6 pt-6 border-t border-white/20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Selector de caso */}
             <div>
-              <label className="block text-sm font-medium text-primary-200 mb-1">Caso</label>
+              <label htmlFor="timer-case" className="block text-sm font-medium text-primary-200 mb-1">Caso</label>
               <select
+                id="timer-case"
                 value={timerForm.case_id}
                 onChange={(e) => handleCaseSelect(e.target.value)}
                 className="input bg-white/10 border-white/20 text-white placeholder-white/50"
@@ -813,8 +814,9 @@ export default function TimeTracking() {
             </div>
             {/* Selector de tipo de actividad */}
             <div>
-              <label className="block text-sm font-medium text-primary-200 mb-1">Actividad</label>
+              <label htmlFor="timer-activity" className="block text-sm font-medium text-primary-200 mb-1">Actividad</label>
               <select
+                id="timer-activity"
                 value={timerForm.activity_type}
                 onChange={(e) => setTimerForm((prev) => ({ ...prev, activity_type: e.target.value }))}
                 className="input bg-white/10 border-white/20 text-white"
@@ -828,8 +830,9 @@ export default function TimeTracking() {
             </div>
             {/* Campo de descripcion */}
             <div>
-              <label className="block text-sm font-medium text-primary-200 mb-1">Descripcion</label>
+              <label htmlFor="timer-description" className="block text-sm font-medium text-primary-200 mb-1">Descripcion</label>
               <input
+                id="timer-description"
                 type="text"
                 value={timerForm.description}
                 onChange={(e) => setTimerForm((prev) => ({ ...prev, description: e.target.value }))}
@@ -927,8 +930,9 @@ export default function TimeTracking() {
           <div className="mt-4 pt-4 border-t grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Filtro: Fecha desde */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Desde</label>
+              <label htmlFor="filter-date-from" className="block text-sm font-medium text-gray-700 mb-1">Desde</label>
               <input
+                id="filter-date-from"
                 type="date"
                 value={dateFrom}
                 onChange={(e) => setDateFrom(e.target.value)}
@@ -937,8 +941,9 @@ export default function TimeTracking() {
             </div>
             {/* Filtro: Fecha hasta */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Hasta</label>
+              <label htmlFor="filter-date-to" className="block text-sm font-medium text-gray-700 mb-1">Hasta</label>
               <input
+                id="filter-date-to"
                 type="date"
                 value={dateTo}
                 onChange={(e) => setDateTo(e.target.value)}
@@ -947,8 +952,9 @@ export default function TimeTracking() {
             </div>
             {/* Filtro: Estado */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+              <label htmlFor="filter-status" className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
               <select
+                id="filter-status"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="input"
@@ -963,8 +969,9 @@ export default function TimeTracking() {
             </div>
             {/* Filtro: Caso */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Caso</label>
+              <label htmlFor="filter-case" className="block text-sm font-medium text-gray-700 mb-1">Caso</label>
               <select
+                id="filter-case"
                 value={caseFilter}
                 onChange={(e) => setCaseFilter(e.target.value)}
                 className="input"
@@ -1155,12 +1162,22 @@ export default function TimeTracking() {
           <div className="flex min-h-screen items-center justify-center p-4">
             {/* Overlay oscuro que cierra el modal al hacer clic */}
             <div
+              role="button"
+              tabIndex={0}
               className="fixed inset-0 bg-gray-600 bg-opacity-75"
               onClick={() => {
                 setShowManualEntry(false)
                 setEditingEntry(null)
                 resetEntryForm()
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === 'Escape') {
+                  setShowManualEntry(false)
+                  setEditingEntry(null)
+                  resetEntryForm()
+                }
+              }}
+              aria-label="Cerrar modal"
             />
             {/* Contenido del modal */}
             <div className="relative bg-white rounded-xl shadow-xl max-w-lg w-full p-6">
@@ -1189,8 +1206,9 @@ export default function TimeTracking() {
                 <div className="grid grid-cols-2 gap-4">
                   {/* Campo: Fecha */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Fecha *</label>
+                    <label htmlFor="entry-date" className="block text-sm font-medium text-gray-700 mb-1">Fecha *</label>
                     <input
+                      id="entry-date"
                       type="date"
                       value={entryForm.date}
                       onChange={(e) => setEntryForm((prev) => ({ ...prev, date: e.target.value }))}
@@ -1199,11 +1217,12 @@ export default function TimeTracking() {
                   </div>
                   {/* Campo: Duracion (horas y minutos separados) */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Duracion *</label>
+                    <label htmlFor="entry-hours" className="block text-sm font-medium text-gray-700 mb-1">Duracion *</label>
                     <div className="flex gap-2">
                       {/* Input de horas */}
                       <div className="flex-1">
                         <input
+                          id="entry-hours"
                           type="number"
                           min="0"
                           value={entryForm.hours}
@@ -1236,8 +1255,9 @@ export default function TimeTracking() {
 
                 {/* Campo: Descripcion */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Descripcion *</label>
+                  <label htmlFor="entry-description" className="block text-sm font-medium text-gray-700 mb-1">Descripcion *</label>
                   <textarea
+                    id="entry-description"
                     value={entryForm.description}
                     onChange={(e) => setEntryForm((prev) => ({ ...prev, description: e.target.value }))}
                     className="input"
@@ -1250,10 +1270,11 @@ export default function TimeTracking() {
                 <div className="grid grid-cols-2 gap-4">
                   {/* Selector: Tipo de actividad */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="entry-activity-type" className="block text-sm font-medium text-gray-700 mb-1">
                       Tipo de Actividad
                     </label>
                     <select
+                      id="entry-activity-type"
                       value={entryForm.activity_type}
                       onChange={(e) =>
                         setEntryForm((prev) => ({ ...prev, activity_type: e.target.value }))
@@ -1269,8 +1290,9 @@ export default function TimeTracking() {
                   </div>
                   {/* Selector: Caso asociado */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Caso</label>
+                    <label htmlFor="entry-case" className="block text-sm font-medium text-gray-700 mb-1">Caso</label>
                     <select
+                      id="entry-case"
                       value={entryForm.case_id}
                       onChange={(e) => setEntryForm((prev) => ({ ...prev, case_id: e.target.value }))}
                       className="input"
