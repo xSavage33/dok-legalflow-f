@@ -543,10 +543,11 @@ export default function Documents() {
           <div className="mt-4 pt-4 border-t grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Filtro por categoria */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="filter-category" className="block text-sm font-medium text-gray-700 mb-1">
                 Categoria
               </label>
               <select
+                id="filter-category"
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
                 className="input"
@@ -561,10 +562,11 @@ export default function Documents() {
             </div>
             {/* Filtro por estado */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="filter-status" className="block text-sm font-medium text-gray-700 mb-1">
                 Estado
               </label>
               <select
+                id="filter-status"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="input"
@@ -595,7 +597,10 @@ export default function Documents() {
             <div
               key={doc.id}
               className="card hover:shadow-lg transition-shadow cursor-pointer"
+              role="button"
+              tabIndex={0}
               onClick={() => openDetail(doc)}
+              onKeyDown={(e) => e.key === 'Enter' && openDetail(doc)}
             >
               <div className="flex items-start gap-4">
                 {/* Icono de documento con fondo */}
@@ -687,10 +692,19 @@ export default function Documents() {
             {/* Fondo oscuro semi-transparente (cierra al hacer clic) */}
             <div
               className="fixed inset-0 bg-gray-600 bg-opacity-75"
+              role="button"
+              tabIndex={0}
               onClick={() => {
                 setShowUploadModal(false)
                 resetUploadForm()
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  setShowUploadModal(false)
+                  resetUploadForm()
+                }
+              }}
+              aria-label="Cerrar modal"
             />
             {/* Contenedor del modal */}
             <div className="relative bg-white rounded-xl shadow-xl max-w-lg w-full p-6">
@@ -711,12 +725,15 @@ export default function Documents() {
               <div className="space-y-4">
                 {/* ----- Selector de Archivo ----- */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="upload-file" className="block text-sm font-medium text-gray-700 mb-1">
                     Archivo *
                   </label>
                   {/* Zona de arrastre/clic para seleccionar archivo */}
                   <div
+                    role="button"
+                    tabIndex={0}
                     onClick={() => fileInputRef.current?.click()}
+                    onKeyDown={(e) => e.key === 'Enter' && fileInputRef.current?.click()}
                     className={clsx(
                       'border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors',
                       uploadFile
@@ -726,6 +743,7 @@ export default function Documents() {
                   >
                     {/* Input de archivo oculto */}
                     <input
+                      id="upload-file"
                       ref={fileInputRef}
                       type="file"
                       onChange={handleFileSelect}
@@ -759,10 +777,11 @@ export default function Documents() {
 
                 {/* ----- Campo: Nombre del Documento ----- */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="upload-name" className="block text-sm font-medium text-gray-700 mb-1">
                     Nombre del documento *
                   </label>
                   <input
+                    id="upload-name"
                     type="text"
                     value={uploadForm.name}
                     onChange={(e) => setUploadForm(prev => ({ ...prev, name: e.target.value }))}
@@ -773,10 +792,11 @@ export default function Documents() {
 
                 {/* ----- Campo: Categoria ----- */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="upload-category" className="block text-sm font-medium text-gray-700 mb-1">
                     Categoria *
                   </label>
                   <select
+                    id="upload-category"
                     value={uploadForm.category}
                     onChange={(e) => setUploadForm(prev => ({ ...prev, category: e.target.value }))}
                     className="input"
@@ -791,10 +811,11 @@ export default function Documents() {
 
                 {/* ----- Campo: Asociar a Caso ----- */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="upload-case" className="block text-sm font-medium text-gray-700 mb-1">
                     Asociar a caso
                   </label>
                   <select
+                    id="upload-case"
                     value={uploadForm.case_id}
                     onChange={(e) => setUploadForm(prev => ({ ...prev, case_id: e.target.value }))}
                     className="input"
@@ -810,10 +831,11 @@ export default function Documents() {
 
                 {/* ----- Campo: Descripcion ----- */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="upload-description" className="block text-sm font-medium text-gray-700 mb-1">
                     Descripcion
                   </label>
                   <textarea
+                    id="upload-description"
                     value={uploadForm.description}
                     onChange={(e) => setUploadForm(prev => ({ ...prev, description: e.target.value }))}
                     className="input"
@@ -898,7 +920,11 @@ export default function Documents() {
             {/* Fondo oscuro */}
             <div
               className="fixed inset-0 bg-gray-600 bg-opacity-75"
+              role="button"
+              tabIndex={0}
               onClick={() => setShowDetailModal(false)}
+              onKeyDown={(e) => e.key === 'Enter' && setShowDetailModal(false)}
+              aria-label="Cerrar modal"
             />
             {/* Contenedor del modal con altura maxima */}
             <div className="relative bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
@@ -1040,10 +1066,11 @@ export default function Documents() {
                         {/* Selector de cambio de estado (solo si tiene permiso) */}
                         {canEdit && (
                           <div className="pt-4 border-t">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label htmlFor="doc-status-change" className="block text-sm font-medium text-gray-700 mb-1">
                               Cambiar estado
                             </label>
                             <select
+                              id="doc-status-change"
                               value={documentDetail?.status || selectedDocument.status}
                               onChange={(e) => {
                                 updateMutation.mutate({
@@ -1207,11 +1234,21 @@ export default function Documents() {
             {/* Fondo oscuro */}
             <div
               className="fixed inset-0 bg-gray-600 bg-opacity-75"
+              role="button"
+              tabIndex={0}
               onClick={() => {
                 setShowVersionModal(false)
                 setVersionFile(null)
                 setVersionDescription('')
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  setShowVersionModal(false)
+                  setVersionFile(null)
+                  setVersionDescription('')
+                }
+              }}
+              aria-label="Cerrar modal"
             />
             {/* Contenedor del modal */}
             <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
@@ -1233,11 +1270,14 @@ export default function Documents() {
               <div className="space-y-4">
                 {/* Selector de archivo para la nueva version */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="version-file" className="block text-sm font-medium text-gray-700 mb-1">
                     Archivo *
                   </label>
                   <div
+                    role="button"
+                    tabIndex={0}
                     onClick={() => versionFileInputRef.current?.click()}
+                    onKeyDown={(e) => e.key === 'Enter' && versionFileInputRef.current?.click()}
                     className={clsx(
                       'border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors',
                       versionFile
@@ -1246,6 +1286,7 @@ export default function Documents() {
                     )}
                   >
                     <input
+                      id="version-file"
                       ref={versionFileInputRef}
                       type="file"
                       onChange={(e) => setVersionFile(e.target.files?.[0] || null)}
@@ -1272,10 +1313,11 @@ export default function Documents() {
 
                 {/* Campo para descripcion de cambios */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="version-description" className="block text-sm font-medium text-gray-700 mb-1">
                     Descripcion de cambios
                   </label>
                   <textarea
+                    id="version-description"
                     value={versionDescription}
                     onChange={(e) => setVersionDescription(e.target.value)}
                     className="input"

@@ -101,7 +101,11 @@ export default function Layout() {
           // bg-gray-600 bg-opacity-75: fondo semitransparente oscuro
           // lg:hidden: oculto en pantallas grandes (escritorio)
           className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 lg:hidden"
+          role="button"
+          tabIndex={0}
           onClick={() => setSidebarOpen(false)}
+          onKeyDown={(e) => e.key === 'Enter' && setSidebarOpen(false)}
+          aria-label="Cerrar menu"
         />
       )}
 

@@ -212,8 +212,9 @@ export default function Profile() {
           {/* Campo: Email (solo lectura) */}
           {/* El email es el identificador unico y no puede cambiarse */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <label htmlFor="profile-email" className="block text-sm font-medium text-gray-700">Email</label>
             <input
+              id="profile-email"
               type="email"
               value={user?.email || ''}
               disabled  // Campo deshabilitado - solo lectura
@@ -224,8 +225,9 @@ export default function Profile() {
           {/* Campo: Rol (solo lectura) */}
           {/* El rol solo puede ser cambiado por un administrador */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Rol</label>
+            <label htmlFor="profile-role" className="block text-sm font-medium text-gray-700">Rol</label>
             <input
+              id="profile-role"
               type="text"
               // Traduce el rol interno a etiqueta legible
               value={roleLabels[user?.role || 'associate']}
@@ -238,8 +240,9 @@ export default function Profile() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Campo: Nombre */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Nombre</label>
+              <label htmlFor="profile-firstname" className="block text-sm font-medium text-gray-700">Nombre</label>
               <input
+                id="profile-firstname"
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -249,8 +252,9 @@ export default function Profile() {
 
             {/* Campo: Apellido */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">Apellido</label>
+              <label htmlFor="profile-lastname" className="block text-sm font-medium text-gray-700">Apellido</label>
               <input
+                id="profile-lastname"
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
@@ -261,8 +265,9 @@ export default function Profile() {
 
           {/* Campo: Telefono (editable) */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Telefono</label>
+            <label htmlFor="profile-phone" className="block text-sm font-medium text-gray-700">Telefono</label>
             <input
+              id="profile-phone"
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -329,8 +334,9 @@ export default function Profile() {
           {/* Campo: Contrasena actual */}
           {/* Requerida para verificar la identidad del usuario */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Contrasena Actual</label>
+            <label htmlFor="current-password" className="block text-sm font-medium text-gray-700">Contrasena Actual</label>
             <input
+              id="current-password"
               type="password"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
@@ -341,8 +347,9 @@ export default function Profile() {
 
           {/* Campo: Nueva contrasena */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Nueva Contrasena</label>
+            <label htmlFor="new-password" className="block text-sm font-medium text-gray-700">Nueva Contrasena</label>
             <input
+              id="new-password"
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -354,8 +361,9 @@ export default function Profile() {
           {/* Campo: Confirmar nueva contrasena */}
           {/* Previene errores de escritura al requerir doble entrada */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Confirmar Nueva Contrasena</label>
+            <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">Confirmar Nueva Contrasena</label>
             <input
+              id="confirm-password"
               type="password"
               value={newPasswordConfirm}
               onChange={(e) => setNewPasswordConfirm(e.target.value)}

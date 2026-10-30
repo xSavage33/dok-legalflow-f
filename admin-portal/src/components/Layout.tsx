@@ -143,7 +143,11 @@ export default function Layout() {
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 lg:hidden"
+          role="button"
+          tabIndex={0}
           onClick={() => setSidebarOpen(false)}
+          onKeyDown={(e) => e.key === 'Enter' && setSidebarOpen(false)}
+          aria-label="Cerrar menu"
         />
       )}
 
